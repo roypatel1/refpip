@@ -11,7 +11,7 @@
 - **Local Processing**: Your data never leaves your machine.
 
 ## 🛠 Installation (Developer Mode)
-1.  **Download** the latest release zip from [refpip.io](https://refpip.io).
+1.  **Download** the latest release zip from [refpip.com](https://refpip.com).
 2.  **Unzip** the files to a local folder.
 3.  Open Chrome and navigate to `chrome://extensions`.
 4.  Enable **Developer Mode** (top right toggle).
@@ -42,7 +42,7 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 RefPip processes all data locally. We do not collect or store any personal information. See our [Privacy Policy](PRIVACY.md) for more details.
 
 ## 🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request or open an issue on our [GitHub Repository](https://github.com/refpip/refpip).
+Contributions are welcome! Please feel free to submit a Pull Request or open an issue on our [GitHub Repository](https://github.com/roypatel1/refpip).
 
 ---
-Created by [RefPip Team](https://refpip.io)
+Created by [RefPip Team](https://refpip.com)

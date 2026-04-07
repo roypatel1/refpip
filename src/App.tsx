@@ -189,7 +189,7 @@ export default function App() {
       const contentJs = `/* RefPip v1.0 
  * Created by RefPip Team 
  * License: MIT 
- * Repository: https://github.com/refpip/refpip
+ * Repository: https://github.com/roypatel1/refpip
  */
 
 (function() {
@@ -443,9 +443,9 @@ export default function App() {
     </div>
   </div>
   <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e5e7eb; font-size: 11px; color: #6b7280; display: flex; justify-content: space-between;">
-    <a href="https://github.com/refpip/refpip" target="_blank" style="color: #4f46e5; text-decoration: none;">GitHub</a>
-    <a href="https://refpip.io/#contact" target="_blank" style="color: #4f46e5; text-decoration: none;">Feedback</a>
-    <a href="https://refpip.io/privacy" target="_blank" style="color: #4f46e5; text-decoration: none;">Privacy</a>
+    <a href="https://github.com/roypatel1/refpip" target="_blank" style="color: #4f46e5; text-decoration: none;">GitHub</a>
+    <a href="https://refpip.com/#contact" target="_blank" style="color: #4f46e5; text-decoration: none;">Feedback</a>
+    <a href="https://refpip.com/privacy" target="_blank" style="color: #4f46e5; text-decoration: none;">Privacy</a>
   </div>
   <script src="popup.js"></script>
 </body>
@@ -539,7 +539,7 @@ RefPip does not collect, store, or transmit any of your personal data. All proce
 
       const readme = `# RefPip - Reference Picture-in-Picture
 Pin AI chat blocks and web content into draggable, floating portals.
-Visit https://refpip.io for more info.`;
+Visit https://refpip.com for more info.`;
 
       zip.file("manifest.json", manifest);
       zip.file("styles.css", styles);
@@ -583,7 +583,7 @@ Visit https://refpip.io for more info.`;
             <a href="#contact" className="text-sm font-medium text-slate-600 hover:text-indigo-600">Contact</a>
             <a href="#privacy" className="text-sm font-medium text-slate-600 hover:text-indigo-600">Privacy</a>
             <a href="#install" className="text-sm font-medium text-slate-600 hover:text-indigo-600">Installation</a>
-            <a href="https://github.com" className="flex items-center gap-1 text-sm font-medium text-slate-600 hover:text-indigo-600">
+            <a href="https://github.com/roypatel1/refpip" className="flex items-center gap-1 text-sm font-medium text-slate-600 hover:text-indigo-600">
               <Github className="h-4 w-4" />
               GitHub
             </a>

@@ -1,7 +1,7 @@
 /* RefPip v1.0 
  * Created by RefPip Team 
  * License: MIT 
- * Repository: https://github.com/refpip/refpip
+ * Repository: https://github.com/roypatel1/refpip
  */
 
 (function() {

@@ -20,4 +20,4 @@ RefPip interacts with AI chat interfaces (like Gemini, AI Studio, and ChatGPT) b
 We may update this policy occasionally. Any changes will be reflected by updating the "Last Updated" date at the top of this document.
 
 ## 6. Contact
-If you have any questions about this Privacy Policy, please contact us via the [Contact Form](https://refpip.io/#contact) or on our [GitHub Repository](https://github.com/refpip/refpip).
+If you have any questions about this Privacy Policy, please contact us via the [Contact Form](https://refpip.com/#contact) or on our [GitHub Repository](https://github.com/roypatel1/refpip).
