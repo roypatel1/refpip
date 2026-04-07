@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      width: 250px;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    h1 {
+      font-size: 16px;
+      margin-top: 0;
+      color: #111827;
+    }
+    p {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #059669;
+      margin-top: 12px;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 12px;
+    }
+    .settings {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #374151;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 34px;
+      height: 20px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 20px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #4f46e5;
+    }
+    input:checked + .slider:before {
+      transform: translateX(14px);
+    }
+  </style>
+</head>
+<body>
+  <h1>RefPip</h1>
+  <p>Reference Picture-in-Picture for your productivity.</p>
+  
+  <div class="settings">
+    <div class="setting-item">
+      <span>Enable Selection Mode</span>
+      <label class="switch">
+        <input type="checkbox" id="selectionMode">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="setting-item">
+      <span>Auto-inject Pin Buttons</span>
+      <label class="switch">
+        <input type="checkbox" id="autoInject" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="setting-item">
+      <span>Portal Theme</span>
+      <select id="portalTheme" style="font-size: 12px; padding: 2px 4px; border-radius: 4px; border: 1px solid #d1d5db;">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+      <button id="pinVisibleBtn" style="padding: 10px; background: #4f46e5; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+        Pin Current View (Mirror)
+      </button>
+      <button id="selectElementBtn" style="padding: 10px; background: #ffffff; color: #4f46e5; border: 2px solid #4f46e5; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+        Select Element to Pin
+      </button>
+    </div>
+  </div>
+
+  <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e5e7eb; font-size: 11px; color: #6b7280; display: flex; justify-content: space-between;">
+    <a href="https://github.com/refpip/refpip" target="_blank" style="color: #4f46e5; text-decoration: none;">GitHub</a>
+    <a href="https://refpip.io/#contact" target="_blank" style="color: #4f46e5; text-decoration: none;">Feedback</a>
+    <a href="https://refpip.io/privacy" target="_blank" style="color: #4f46e5; text-decoration: none;">Privacy</a>
+  </div>
+
+  <div class="status">
+    <div class="dot"></div>
+    <span>Active on this tab</span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "RefPip",
+  "version": "1.0",
+  "description": "RefPip (Reference Picture-in-Picture) - Pin AI chat blocks and web content into draggable, floating portals.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
