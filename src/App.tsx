@@ -29,14 +29,26 @@ export default function App() {
   "name": "RefPip",
   "version": "1.0",
   "description": "RefPip (Reference Picture-in-Picture) - Pin AI chat blocks and web content into draggable, floating portals.",
-  "permissions": ["activeTab", "scripting", "storage"],
+  "permissions": ["activeTab", "scripting", "storage", "contextMenus"],
+  "host_permissions": [
+    "https://aistudio.google.com/*",
+    "https://gemini.google.com/*",
+    "https://chatgpt.com/*"
+  ],
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        "https://aistudio.google.com/*",
+        "https://gemini.google.com/*",
+        "https://chatgpt.com/*"
+      ],
       "js": ["content.js"],
       "css": ["styles.css"]
     }
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "popup.html"
   },
@@ -46,6 +58,54 @@ export default function App() {
     "128": "icon128.png"
   }
 }`;
+
+      const backgroundJs = `/* RefPip Background Script */
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create({
+      id: "pinSelection",
+      title: "Pin Selection to RefPip",
+      contexts: ["selection"]
+    });
+    chrome.contextMenus.create({
+      id: "pinVisible",
+      title: "Pin Current View (Mirror)",
+      contexts: ["page"]
+    });
+    chrome.contextMenus.create({
+      id: "selectElement",
+      title: "Select Element to Pin",
+      contexts: ["page"]
+    });
+  });
+});
+
+async function ensureContentScript(tabId) {
+  try {
+    await chrome.tabs.sendMessage(tabId, { action: "ping" });
+  } catch (e) {
+    await chrome.scripting.executeScript({
+      target: { tabId: tabId },
+      files: ["content.js"]
+    });
+    await chrome.scripting.insertCSS({
+      target: { tabId: tabId },
+      files: ["styles.css"]
+    });
+  }
+}
+
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+  if (!tab) return;
+  await ensureContentScript(tab.id);
+  if (info.menuItemId === "pinSelection") {
+    chrome.tabs.sendMessage(tab.id, { action: "pinSelection" });
+  } else if (info.menuItemId === "pinVisible") {
+    chrome.tabs.sendMessage(tab.id, { action: "pinVisible" });
+  } else if (info.menuItemId === "selectElement") {
+    chrome.tabs.sendMessage(tab.id, { action: "startSelectElement" });
+  }
+});`;
 
       const styles = `.ref-portal-container {
   position: fixed;
@@ -236,6 +296,12 @@ export default function App() {
       sendResponse({ status: 'ok' });
     } else if (request.action === 'startSelectElement') {
       startElementSelection();
+      sendResponse({ status: 'ok' });
+    } else if (request.action === 'pinSelection') {
+      const selection = window.getSelection().toString();
+      if (selection) {
+        createPortalFromText(selection);
+      }
       sendResponse({ status: 'ok' });
     }
   });
@@ -434,7 +500,10 @@ export default function App() {
       </select>
     </div>
     <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
-      <button id="pinVisibleBtn" style="padding: 10px; background: #4f46e5; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+      <button id="pinSelectionBtn" style="padding: 10px; background: #4f46e5; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+        Pin Selection
+      </button>
+      <button id="pinVisibleBtn" style="padding: 10px; background: #ffffff; color: #4f46e5; border: 2px solid #4f46e5; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
         Pin Current View (Mirror)
       </button>
       <button id="selectElementBtn" style="padding: 10px; background: #ffffff; color: #4f46e5; border: 2px solid #4f46e5; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
@@ -455,6 +524,7 @@ export default function App() {
   const selectionMode = document.getElementById('selectionMode');
   const autoInject = document.getElementById('autoInject');
   const portalTheme = document.getElementById('portalTheme');
+  const pinSelectionBtn = document.getElementById('pinSelectionBtn');
   const pinVisibleBtn = document.getElementById('pinVisibleBtn');
   const selectElementBtn = document.getElementById('selectElementBtn');
   chrome.storage.sync.get(['selectionMode', 'autoInject', 'portalTheme'], (result) => {
@@ -465,9 +535,36 @@ export default function App() {
   selectionMode.addEventListener('change', () => chrome.storage.sync.set({ selectionMode: selectionMode.checked }));
   autoInject.addEventListener('change', () => chrome.storage.sync.set({ autoInject: autoInject.checked }));
   portalTheme.addEventListener('change', () => chrome.storage.sync.set({ portalTheme: portalTheme.value }));
+  
+  async function ensureContentScript(tabId) {
+    try {
+      await chrome.tabs.sendMessage(tabId, { action: "ping" });
+    } catch (e) {
+      await chrome.scripting.executeScript({
+        target: { tabId: tabId },
+        files: ["content.js"]
+      });
+      await chrome.scripting.insertCSS({
+        target: { tabId: tabId },
+        files: ["styles.css"]
+      });
+    }
+  }
+
+  pinSelectionBtn.addEventListener('click', async () => {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab) {
+      await ensureContentScript(tab.id);
+      chrome.tabs.sendMessage(tab.id, { action: 'pinSelection' }, (response) => {
+        if (chrome.runtime.lastError) console.error(chrome.runtime.lastError);
+        else window.close();
+      });
+    }
+  });
   pinVisibleBtn.addEventListener('click', async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab) {
+      await ensureContentScript(tab.id);
       chrome.tabs.sendMessage(tab.id, { action: 'pinVisible' }, (response) => {
         if (chrome.runtime.lastError) console.error(chrome.runtime.lastError);
         else window.close();
@@ -477,6 +574,7 @@ export default function App() {
   selectElementBtn.addEventListener('click', async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab) {
+      await ensureContentScript(tab.id);
       chrome.tabs.sendMessage(tab.id, { action: 'startSelectElement' }, (response) => {
         if (chrome.runtime.lastError) console.error(chrome.runtime.lastError);
         else window.close();
@@ -542,6 +640,7 @@ Pin AI chat blocks and web content into draggable, floating portals.
 Visit https://refpip.com for more info.`;
 
       zip.file("manifest.json", manifest);
+      zip.file("background.js", backgroundJs);
       zip.file("styles.css", styles);
       zip.file("content.js", contentJs);
       zip.file("popup.html", popupHtml);

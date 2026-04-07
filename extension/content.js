@@ -1,7 +1,7 @@
 /* RefPip v1.0 
  * Created by RefPip Team 
  * License: MIT 
- * Repository: https://github.com/roypatel1/refpip
+ * Repository: https://github.com/refpip/refpip
  */
 
 (function() {
@@ -58,13 +58,21 @@
     }
   });
 
-  // Listen for messages from popup
+  // Listen for messages from popup or background
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'pinVisible') {
+    if (request.action === 'ping') {
+      sendResponse({ status: 'ok' });
+    } else if (request.action === 'pinVisible') {
       createPortalFromVisible();
       sendResponse({ status: 'ok' });
     } else if (request.action === 'startSelectElement') {
       startElementSelection();
+      sendResponse({ status: 'ok' });
+    } else if (request.action === 'pinSelection') {
+      const selection = window.getSelection().toString();
+      if (selection) {
+        createPortalFromText(selection);
+      }
       sendResponse({ status: 'ok' });
     }
   });

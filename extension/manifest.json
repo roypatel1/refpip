@@ -3,14 +3,26 @@
   "name": "RefPip",
   "version": "1.0",
   "description": "RefPip (Reference Picture-in-Picture) - Pin AI chat blocks and web content into draggable, floating portals.",
-  "permissions": ["activeTab", "scripting", "storage"],
+  "permissions": ["activeTab", "scripting", "storage", "contextMenus"],
+  "host_permissions": [
+    "https://aistudio.google.com/*",
+    "https://gemini.google.com/*",
+    "https://chatgpt.com/*"
+  ],
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        "https://aistudio.google.com/*",
+        "https://gemini.google.com/*",
+        "https://chatgpt.com/*"
+      ],
       "js": ["content.js"],
       "css": ["styles.css"]
     }
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "popup.html"
   }
